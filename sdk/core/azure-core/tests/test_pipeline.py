@@ -258,6 +258,14 @@ class TestClientRequest(unittest.TestCase):
 
         self.assertIn(request.url, ["a/b/c?g=h&t=y", "a/b/c?t=y&g=h"])
 
+    def test_request_url_encoded_with_params(self):
+
+        request = HttpRequest("GET", "/")
+        request.url = "a/b/c?%24t=y"    # %24 is $
+        request.format_parameters({"$t": "h"})
+
+        self.assertEqual(request.url, "a/b/c?$t=h")
+
 
 if __name__ == "__main__":
     unittest.main()

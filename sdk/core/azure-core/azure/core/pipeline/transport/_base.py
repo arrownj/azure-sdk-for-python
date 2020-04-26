@@ -41,9 +41,11 @@ import copy
 try:
     binary_type = str
     from urlparse import urlparse  # type: ignore
+    from urllib import unquote
 except ImportError:
     binary_type = bytes  # type: ignore
     from urllib.parse import urlparse
+    from urllib.parse import unquote
 import xml.etree.ElementTree as ET
 
 from typing import (
@@ -283,6 +285,7 @@ class HttpRequest(object):
         query = urlparse(self.url).query
         if query:
             self.url = self.url.partition("?")[0]
+            query = unquote(query)
             existing_params = {
                 p[0]: p[-1] for p in [p.partition("=") for p in query.split("&")]
             }
